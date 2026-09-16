@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Add Vaccination - {{ cattle.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="mb-4">
+        <a href="{{ url_for('view_cattle', cattle_id=cattle.cattle_id) }}" class="text-sm text-gray-500 hover:text-gray-800">&larr; Cancel and return</a>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">Add Vaccination for {{ cattle.name }}</h2>
+
+        <form method="POST" action="{{ url_for('add_vaccination', cattle_id=cattle.cattle_id) }}" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Vaccine Name</label>
+                <input type="text" name="vaccine_name" placeholder="e.g., FMD" required class="w-full px-4 py-2 border rounded-lg outline-none focus:border-agri-500 text-sm">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Vaccination Date</label>
+                    <input type="date" name="vaccination_date" required class="w-full px-4 py-2 border rounded-lg outline-none focus:border-agri-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Next Due Date</label>
+                    <input type="date" name="next_due_date" class="w-full px-4 py-2 border rounded-lg outline-none focus:border-agri-500 text-sm">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Notes / Batch Number</label>
+                <textarea name="notes" rows="2" class="w-full px-4 py-2 border rounded-lg outline-none focus:border-agri-500 text-sm"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700">Add Vaccination</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

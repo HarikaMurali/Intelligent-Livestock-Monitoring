@@ -1,0 +1,228 @@
+# Draft Synopsis for IEEE Paper
+
+## Title
+
+**IoT-Based Smart Cattle Monitoring and Farm Management System Using ESP32 and Web Dashboard**
+
+---
+
+## Abstract
+
+Livestock management plays a vital role in modern agriculture, where continuous monitoring of cattle health and location is essential for improving productivity and reducing losses. Traditional methods rely on manual observation, making it difficult to track vaccination schedules, estrus cycles, body temperature, and animal movement efficiently.
+
+This paper proposes an IoT-based cattle monitoring system using ESP32 as the primary controller. Each animal is identified through RFID technology, enabling quick access to individual records. A DS18B20 digital temperature sensor is used for monitoring body temperature, while an RF transmitter and receiver pair estimates whether cattle remain within a predefined monitoring range. Sensor data are transmitted to a Flask-based web server and stored in MongoDB. A web dashboard provides real-time visualization of cattle information, vaccination schedules, estrus cycle notifications, and location status. Push notifications are delivered through OneSignal to alert farmers whenever abnormal conditions or important events occur.
+
+The proposed system aims to reduce manual record keeping, improve livestock health management, and enable farmers to monitor their farms remotely through an easy-to-use web interface.
+
+**Keywords:** Internet of Things, ESP32, RFID, Livestock Monitoring, Flask, MongoDB, Smart Farming, DS18B20, OneSignal.
+
+---
+
+# I. Introduction
+
+Livestock farming contributes significantly to agricultural production and rural economies. Effective management of cattle requires regular monitoring of health conditions, reproductive cycles, vaccinations, and movement. Manual maintenance of these records is time-consuming and susceptible to human error.
+
+Recent advances in IoT have enabled real-time monitoring systems that automate data collection and improve farm management. Wireless sensors combined with cloud-based dashboards provide farmers with instant access to important cattle information.
+
+This work presents an integrated cattle monitoring platform capable of identifying animals using RFID, monitoring body temperature, detecting whether cattle are within a specified monitoring range, and maintaining comprehensive health records through a centralized web application.
+
+---
+
+# II. Problem Statement
+
+Traditional cattle management systems suffer from several limitations:
+
+* Manual recording of cattle information.
+* Difficulty in identifying individual animals quickly.
+* Lack of automated health monitoring.
+* Missed vaccination schedules.
+* Poor monitoring of estrus cycles.
+* Difficulty locating animals within large farms.
+* Absence of centralized digital records.
+
+These limitations increase labor costs and may negatively impact animal health and farm productivity.
+
+---
+
+# III. Objectives
+
+The objectives of the proposed system are:
+
+* Develop an IoT-enabled cattle monitoring system.
+* Identify cattle using RFID technology.
+* Monitor body temperature using DS18B20 sensors.
+* Detect whether cattle remain within RF communication range.
+* Store cattle information in MongoDB.
+* Provide a web dashboard for farmers.
+* Send real-time notifications using OneSignal.
+* Maintain vaccination and estrus cycle records.
+* Provide an administrator interface for farm management.
+
+---
+
+# IV. Proposed System
+
+The proposed architecture consists of hardware installed on cattle and a web-based monitoring platform.
+
+Each animal is assigned a unique RFID tag. When scanned, the ESP32 retrieves the tag ID and communicates with the Flask server. The DS18B20 sensor periodically measures body temperature, while RF transmitter-receiver modules determine whether the animal remains within the designated monitoring area.
+
+All collected data are transmitted to the backend server where MongoDB stores cattle profiles, health records, vaccination history, and reproductive information.
+
+Farmers access the system through a web dashboard, while administrators manage users, farms, and cattle records.
+
+---
+
+# V. Hardware Components
+
+### ESP32
+
+* Main microcontroller
+* Reads sensor data
+* Handles wireless communication
+* Sends data to server
+
+### RFID Reader
+
+* Reads RFID ear tags
+* Identifies individual cattle
+* Retrieves animal records
+
+### RFID Tag
+
+* Unique identification for every animal
+
+### DS18B20 Temperature Sensor
+
+* Measures cattle body temperature
+* Detects abnormal temperature conditions
+
+### RF Transmitter and Receiver
+
+* Detects whether cattle remain within communication range
+* Assists in simple location monitoring
+* Generates alerts when cattle move outside the monitored zone
+
+---
+
+# VI. Software Components
+
+### Backend
+
+* Python
+* Flask Framework
+
+Functions:
+
+* REST APIs
+* Authentication
+* Database communication
+* Notification management
+
+### Database
+
+MongoDB stores:
+
+* Farm information
+* User accounts
+* Cattle profiles
+* Vaccination history
+* Estrus cycle records
+* Temperature history
+* Location status
+* Notification logs
+
+### Frontend
+
+Dashboard developed using HTML, CSS, Bootstrap, and JavaScript.
+
+Main features:
+
+* Secure login
+* Farm management
+* Real-time cattle monitoring
+* Temperature visualization
+* Vaccination schedule
+* Estrus cycle tracking
+* RFID search
+* Alert management
+
+---
+
+# VII. System Workflow
+
+1. User logs into the dashboard.
+2. User selects a farm.
+3. Dashboard displays all registered cattle.
+4. RFID tag is scanned.
+5. ESP32 identifies the animal.
+6. Temperature is measured using DS18B20.
+7. RF modules determine whether cattle are within range.
+8. Sensor data are transmitted to the Flask server.
+9. MongoDB stores updated information.
+10. Dashboard refreshes with new data.
+11. OneSignal sends notifications when abnormal events occur.
+
+---
+
+# VIII. Dashboard Features
+
+### Farmer Dashboard
+
+* Login authentication
+* Farm selection
+* Cattle list
+* RFID lookup
+* Animal profile
+* Current temperature
+* Vaccination history
+* Estrus cycle information
+* Location status
+* Notification history
+
+### Admin Dashboard
+
+* User management
+* Farm management
+* Register cattle
+* Assign RFID tags
+* Edit cattle information
+* Vaccination management
+* Manage estrus records
+* View system statistics
+* Notification management
+
+---
+
+# IX. Expected Results
+
+The proposed system is expected to:
+
+* Reduce manual paperwork.
+* Improve cattle identification.
+* Monitor body temperature continuously.
+* Provide centralized livestock records.
+* Improve vaccination management.
+* Assist farmers in monitoring reproductive cycles.
+* Notify users of abnormal conditions in real time.
+* Improve overall farm management efficiency.
+
+---
+
+# X. Future Scope
+
+Future enhancements may include:
+
+* GPS-based tracking for precise outdoor location.
+* AI-based disease prediction.
+* Machine learning for estrus prediction.
+* Milk production analytics.
+* Integration with veterinary services.
+* Mobile application with offline support.
+* Solar-powered monitoring devices.
+* Cloud deployment for multi-farm management.
+
+---
+
+# XI. Conclusion
+
+The proposed IoT-based cattle monitoring system integrates RFID identification, temperature sensing, RF-based proximity monitoring, and web technologies into a unified livestock management platform. By combining ESP32 hardware with a Flask backend and MongoDB database, the system enables centralized monitoring of cattle health, reproductive cycles, vaccination records, and location status. Real-time notifications and an intuitive dashboard assist farmers in making timely management decisions, ultimately improving livestock welfare and farm productivity.

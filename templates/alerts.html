@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}System Alerts{% endblock %}
+
+{% block breadcrumbs %}
+<span class="text-gray-500 font-medium">System</span>
+<span class="text-gray-400">/</span>
+<span class="text-gray-900 font-semibold">Alerts</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Herd Alerts</h1>
+    <p class="text-sm text-gray-500 mt-1">Notifications for estrus cycles and vaccinations.</p>
+</div>
+
+<div class="glass-card p-6">
+    {% if alerts %}
+        <div class="space-y-4">
+            {% for alert in alerts %}
+            <div class="p-4 rounded-lg border-l-4 bg-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4
+                {% if alert.type == 'health' %}border-red-500{% elif alert.type == 'estrus' %}border-blue-500{% else %}border-yellow-500{% endif %}">
+                <div>
+                    <h4 class="font-bold text-gray-900 uppercase text-xs tracking-wider mb-1">{{ alert.type }} ALERT</h4>
+                    <p class="text-sm text-gray-700">{{ alert.message }}</p>
+                    <p class="text-xs text-gray-400 mt-2">{{ alert.created_at[:10] }}</p>
+                </div>
+                <a href="{{ url_for('view_cattle', cattle_id=alert.cattle_id) }}" class="text-sm font-semibold text-brand-sidebar hover:bg-gray-50 px-4 py-2 border rounded-lg transition text-center">View Cattle</a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <i class="ph ph-check-circle text-4xl text-green-400 mb-3"></i>
+            <h3 class="text-lg font-medium text-gray-900">All clear!</h3>
+            <p class="text-gray-500 mt-1">There are no active alerts for your herd right now.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

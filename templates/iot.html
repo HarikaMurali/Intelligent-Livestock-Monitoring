@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}IoT Network{% endblock %}
+
+{% block breadcrumbs %}
+<span class="text-gray-500 font-medium">System</span>
+<span class="text-gray-400">/</span>
+<span class="text-gray-900 font-semibold">IoT Devices</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-end">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">ESP32 Gateway Hub</h1>
+        <p class="text-sm text-gray-500 mt-1">Manage physical hardware and sensor belts.</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="glass-card p-6 border-l-4 border-green-500">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-bold text-gray-900">Main Barn Scanner</h3>
+                <p class="text-xs text-gray-500">ESP32 + MFRC522</p>
+            </div>
+            <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded animate-pulse">ONLINE</span>
+        </div>
+        <p class="text-sm text-gray-700"><strong>IP Address:</strong> Auto-Discovery (mDNS/UDP)</p>
+        <p class="text-sm text-gray-700 mt-1"><strong>Last Ping:</strong> Just now</p>
+    </div>
+    
+    <div class="glass-card p-6 border-l-4 border-yellow-500 opacity-75">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-bold text-gray-900">Pasture Gateway</h3>
+                <p class="text-xs text-gray-500">LoRa Receiver</p>
+            </div>
+            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-1 rounded">STANDBY</span>
+        </div>
+        <p class="text-sm text-gray-700">Awaiting hardware connection...</p>
+    </div>
+</div>
+{% endblock %}

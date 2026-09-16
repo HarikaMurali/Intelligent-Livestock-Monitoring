@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Manage Farmers - Admin{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('admin_dashboard') }}" class="text-sm text-gray-500 hover:text-gray-800">&larr; Back to Dashboard</a>
+</div>
+
+<h1 class="text-2xl font-bold text-gray-900 mb-6">Registered Farmers</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% for farmer in farmers %}
+    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+        <div class="flex justify-between items-start mb-4 border-b pb-4">
+            <div>
+                <h3 class="font-bold text-lg text-gray-900">{{ farmer.name }}</h3>
+                <p class="text-sm text-gray-500">{{ farmer.email }}</p>
+            </div>
+            <span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">Farmer</span>
+        </div>
+
+        <form method="POST" action="{{ url_for('assign_farms', farmer_id=farmer._id) }}">
+            <p class="text-sm font-medium text-gray-700 mb-3">Assigned Farms:</p>
+            <div class="space-y-2 mb-4 max-h-40 overflow-y-auto">
+                {% for farm in farms %}
+                <label class="flex items-center space-x-3 text-sm text-gray-700">
+                    <!-- Check the box if the farm is currently assigned to this farmer -->
+                    <input type="checkbox" name="farm_ids" value="{{ farm.farm_id }}" 
+                        class="rounded text-agri-600 focus:ring-agri-500"
+                        {% if farm.farm_id in farmer.farm_ids %}checked{% endif %}>
+                    <span><strong>{{ farm.farm_id }}</strong> - {{ farm.name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <button type="submit" class="w-full bg-gray-100 text-gray-700 font-medium py-2 rounded-lg hover:bg-gray-200 transition">Update Assignments</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

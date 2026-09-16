@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block title %}Herd Analytics - AgriSaaS{% endblock %}
+
+{% block breadcrumbs %}
+<span class="text-gray-500 font-medium">Management</span>
+<span class="text-gray-400">/</span>
+<span class="text-gray-900 font-semibold">Herd Analytics</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Herd Data Intelligence</h1>
+        <p class="text-sm text-gray-500 mt-1">Real-time demographic, medical, and biological analytics.</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="bg-white border border-gray-200 px-4 py-2 rounded-xl shadow-sm">
+            <span class="text-xs text-gray-500 font-medium block">Total Herd</span>
+            <span class="text-lg font-bold text-gray-900">{{ total_cattle }} Cattle</span>
+        </div>
+        <div class="bg-white border border-gray-200 px-4 py-2 rounded-xl shadow-sm">
+            <span class="text-xs text-gray-500 font-medium block">Herd Health Score</span>
+            <span class="text-lg font-bold text-agri-600">{{ health_score }}%</span>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+    
+    <!-- 1. Health Breakdown (Doughnut) -->
+    <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+            <h3 class="font-bold text-gray-900 text-sm">Health Status</h3>
+            <i class="ph ph-heartbeat text-agri-600 text-lg"></i>
+        </div>
+        <div class="relative flex justify-center items-center" style="height: 220px;">
+            <canvas id="healthChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 2. Age Demographics (Polar Area) -->
+    <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+            <h3 class="font-bold text-gray-900 text-sm">Age Demographics</h3>
+            <i class="ph ph-hourglass text-blue-600 text-lg"></i>
+        </div>
+        <div class="relative flex justify-center items-center" style="height: 220px;">
+            <canvas id="ageChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 3. Weight Brackets (Bar Chart) -->
+    <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+            <h3 class="font-bold text-gray-900 text-sm">Weight Groups</h3>
+            <i class="ph ph-scales text-amber-600 text-lg"></i>
+        </div>
+        <div class="relative flex justify-center items-center" style="height: 220px;">
+            <canvas id="weightChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    
+    <!-- 4. Breed Breakdown (Horizontal Bar) -->
+    <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+            <h3 class="font-bold text-gray-900 text-sm">Breed Distribution</h3>
+            <i class="ph ph-dna text-purple-600 text-lg"></i>
+        </div>
+        <div class="relative" style="height: 240px;">
+            <canvas id="breedChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 5. Vaccination Administered (Bar Chart) -->
+    <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+            <h3 class="font-bold text-gray-900 text-sm">Vaccination Records</h3>
+            <i class="ph ph-syringe text-emerald-600 text-lg"></i>
+        </div>
+        <div class="relative" style="height: 240px;">
+            <canvas id="vaxChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Palettes
+    const brandColors = {
+        emerald: '#10B981',
+        red: '#EF4444',
+        amber: '#F59E0B',
+        blue: '#3B82F6',
+        purple: '#8B5CF6',
+        indigo: '#6366F1',
+        teal: '#14B8A6',
+        darkGreen: '#143F2C'
+    };
+
+    const healthData = {{ health_counts | tojson }};
+    const ageData = {{ age_counts | tojson }};
+    const weightData = {{ weight_counts | tojson }};
+    const breedData = {{ breed_counts | tojson }};
+    const vaxData = {{ vax_type_counts | tojson }};
+
+    // 1. Health Status Chart
+    new Chart(document.getElementById('healthChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(healthData),
+            datasets: [{
+                data: Object.values(healthData),
+                backgroundColor: [brandColors.emerald, brandColors.red, brandColors.amber, brandColors.purple],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '68%',
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } }
+            }
+        }
+    });
+
+    // 2. Age Demographics Chart (Polar Area)
+    new Chart(document.getElementById('ageChart'), {
+        type: 'polarArea',
+        data: {
+            labels: Object.keys(ageData),
+            datasets: [{
+                data: Object.values(ageData),
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.75)',
+                    'rgba(16, 185, 129, 0.75)',
+                    'rgba(245, 158, 11, 0.75)',
+                    'rgba(139, 92, 246, 0.75)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } }
+            },
+            scales: {
+                r: { ticks: { display: false } }
+            }
+        }
+    });
+
+    // 3. Weight Groups (Vertical Bar)
+    new Chart(document.getElementById('weightChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(weightData),
+            datasets: [{
+                label: 'Cattle Count',
+                data: Object.values(weightData),
+                backgroundColor: ['#6EE7B7', '#34D399', '#059669', '#047857'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#F3F4F6' }, ticks: { stepSize: 5 } },
+                x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+            }
+        }
+    });
+
+    // 4. Breed Breakdown (Horizontal Bar)
+    new Chart(document.getElementById('breedChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(breedData),
+            datasets: [{
+                label: 'Headcount',
+                data: Object.values(breedData),
+                backgroundColor: brandColors.darkGreen,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { beginAtZero: true, grid: { color: '#F3F4F6' }, ticks: { stepSize: 5 } },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 5. Vaccination Records (Bar Chart)
+    new Chart(document.getElementById('vaxChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(vaxData),
+            datasets: [{
+                label: 'Doses Administered',
+                data: Object.values(vaxData),
+                backgroundColor: [brandColors.indigo, brandColors.teal, brandColors.purple, brandColors.amber],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#F3F4F6' }, ticks: { stepSize: 10 } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+{% endblock %}
